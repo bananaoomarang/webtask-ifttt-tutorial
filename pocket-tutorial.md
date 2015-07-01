@@ -1,4 +1,6 @@
-# If This Then [run nodejs]: Extending IFTTT with Webtasks.io
+# If This Then [Node.js]: Extending IFTTT with Webtask.io
+
+![Simples](/IFTTT-diagram.jpg "Simples")
 
 If you've ever used IFTTT as a developer and thought something like: "Gee, I wish I could write my own scripts as channels", you may just be in luck, webtasks have you covered. In this article we'll build a simple IFTTT channel which logs words used in the headers and bylines of articles we save to [Pocket](https://getpocket.com/), so they are sortable by frequency.
 
@@ -144,6 +146,6 @@ We can soup it up by ignoring common words and punctuation, as well as styling t
 
 ### To the Backend and Beyond
 
-If you'd like to find out more about how they work and more advanced features, you should check out the [docs](https://webtasks.io/docs) on Webtasks.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
+If you'd like to find out more about how they work and more advanced features, you should check out the [docs](https://webtask.io/docs) on Webtasks.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
 
 ![Ta da!](/IFTTT3.jpg "Ta da!")
