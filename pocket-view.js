@@ -1,7 +1,7 @@
 "use latest";
 
 var { MongoClient } = require('mongodb');
-var ejs             = require('ejs');
+var handlebars      = require('handlebars');
 
 var View = `
 <html>
@@ -9,15 +9,15 @@ var View = `
     <title>Pocketed Words</title>
   </head>
   <body>
-    <% if(!words.length) { %>
+    {{#if words.length}}
+      <ul>
+        {{#each words}}
+          <li>{{word}}: {{count}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
       <h1>No words :(</h1>
-    <% } else { %>
-    <ul>
-      <% words.sort(sortFunction).forEach(function (word) { %>
-        <li> <%= word.word %> : <%= word.count%></li>
-      <% }); %>
-    </ul>
-    <% } %>
+    {{/if}}
   </body>
 </html>
 `;
@@ -34,14 +34,16 @@ return (ctx, req, res) => {
       .toArray( (err, words) => {
         if(err) return res.end(err);
 
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-
-        res.end(ejs.render(View, {
-          words,
-          sortFunction: (word1, word2) => {
+        const view_ctx = {
+          words: words.sort( (word1, word2) => {
             return word2.count - word1.count;
-          }
-        }));
+          })
+        };
+
+        const template = handlebars.compile(View);
+
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(template(view_ctx));
       });
   });
 };
