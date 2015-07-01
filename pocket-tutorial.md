@@ -18,7 +18,7 @@ A webtask is a snippet of code that runs an entry function on a GET request, ret
 + Vastly simplifies/eliminates the need for backend code, boiling it down into reusable, functional pieces.
 + Tamper proof (uses JSON Webtokens behind the scenes), and encrypted where they need to be
 
-You can play with the service online [here](https://webtask.io/tryit), and read more about it [here](https://webtask.io/docs), but what it amounts to is a safe and frictionless way to run custom micro-services.
+You can play with the service online [here](https://webtask.io/tryit), and read more about it [here](https://webtask.io/docs), but what it amounts to is a safe and frictionless way to run custom micro-services. Perfect for extending IFTTT.
 
 ## Setup
 
@@ -59,9 +59,9 @@ Generate a new URL with `wt create`, but this time when you visit it add `&name=
 
 ## Backend, What Backend?
 
-In order for our app to work, we will need to store the data somewhere more persistent. We're going to use a Mongo database (hosted for free by [Mongolab](https://mongolab.com)) to store our data, then we can use it later however we want.
+In order for our app to work, we will need to store the data somewhere more persistent. We're going to use a Mongo database (hosted for free by [Mongolab](https://mongolab.com)) to keep record, then we can use it later however we want.
 
-Our webtask can look something like:
+Our webtask might look something like:
 
 ```
 "use latest";
@@ -94,7 +94,7 @@ return (ctx, done) => {
 
 We connect to the remote database, put all the words Pocket gives us in an array and loop over it, saving each one, then we confirm to IFTTT that we're done by responding.
 
-Note that we can use require just as in regular Node. There is a list of installed modules [here](https://tehsis.github.io/webtaskio-canirequire/), with many of them available in multiple versions.
+Note that we can use `require` just as in regular Node. There is a list of available modules [here](https://tehsis.github.io/webtaskio-canirequire/), with many of them installed in multiple versions for your pleasure.
 
 Our `save_word` function should insert our word with a count '1' if it hasn't been encountered before, and increment our count if it has been. Mongo makes this easy with its update `upsert` option, so something like this should do the trick:
 
@@ -136,16 +136,16 @@ And `SECRET` will by passed on `ctx.data`, just like the variables attached on t
 
 ### If This Then Webtask
  
-Connecting your webtask to IFTTT is relatively painless, just setup a recipe that is triggered every time you save something to Pocket and configure the `that` component to be a 'Maker Channel', where we can pass off control. Copy and paste the URL given by `wt create` into the box, but add `&title={{Title}}&excerpt={{Excerpt}}` to the very end. This dumps the data given by the Pocket channel into our app and makes it consumable in the webtask's context.
+Connecting your webtask to IFTTT is relatively painless, just setup a recipe to be triggered every time you save something to Pocket and configure the 'That' component to be a 'Maker Channel', where we can hand over control to our script. Copy and paste the URL given by `wt create` into the box, but add `&title={{Title}}&excerpt={{Excerpt}}` to the very end. This dumps the data given by the Pocket channel, making it consumable in the webtask's context.
 
-You can test to see if everything's working by saving something in Pocket and watching your webtask's logs with `wt logs`. Sometimes it takes a little while for IFTTT to send the request (though it is almost always within a couple of minutes), but you should see a bunch of 'Successfully saved' messages in your console.
+You can test to see if everything's working by saving something in Pocket and watching your webtask's logs with `wt logs`. Sometimes it takes a little while for IFTTT to send the request (within a couple of minutes), but you should see a bunch of 'Successfully saved' messages in your console.
 
 ![Success.](/IFTTT2.jpg "Nice logging skills.")
 
-We can soup it up by ignoring common words and punctuation, as well as styling the result, but the use of webtasks would remain the same.
+We can soup it up by ignoring common words and punctuation, saving extra data etc, but the use of webtasks would remain the same.
 
 ### To the Backend and Beyond
 
 ![Ta da!](/IFTTT3.jpg "Ta da!")
 
-If you'd like to find out more about how they work and more advanced features, you should check out the [docs](https://webtask.io/docs) on Webtasks.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
+If you'd like to find out more about how webtasks work, as well as their more advanced features, you should check out the [docs](https://webtask.io/docs) on Webtask.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
