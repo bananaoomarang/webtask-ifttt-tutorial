@@ -146,6 +146,6 @@ We can soup it up by ignoring common words and punctuation, as well as styling t
 
 ### To the Backend and Beyond
 
-If you'd like to find out more about how they work and more advanced features, you should check out the [docs](https://webtask.io/docs) on Webtasks.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
-
 ![Ta da!](/IFTTT3.jpg "Ta da!")
+
+If you'd like to find out more about how they work and more advanced features, you should check out the [docs](https://webtask.io/docs) on Webtasks.io, but hopefully you can see that their simplicity and versatility is already pretty exciting!
