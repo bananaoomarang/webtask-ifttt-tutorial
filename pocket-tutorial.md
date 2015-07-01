@@ -59,7 +59,7 @@ Generate a new URL with `wt create`, but this time when you visit it add `&name=
 
 ## Backend, What Backend?
 
-In order for our app to work, we will need to store the data somewhere more persistent. We're going to use a Mongo database (hosted for free by [Mongolab](https://mongolab.com)) to keep record, then we can use it later however we want.
+We're going to take the titles and article excerpts that Pocket gives us and log their frequency. Since Webtasks run in disposable Docker containers, with no guarantees concerning container recycling, we'll need somewhere more persistant for the values to live. Here we'll use Mongo, because it's easy and free to get access to a database ([Mongolab](https://mongolab.com)), and pretty terse to code with under Node.
 
 Our webtask might look something like:
 
@@ -135,7 +135,9 @@ $ wt create --secret SECRET=<my-darkest-secrets> <my-webtask.js>
 And `SECRET` will by passed on `ctx.data`, just like the variables attached on the querystring. If you haven't already set one up, sign up for a sandbox account at [Mongolab](mongolab.com/) and pass in your database's address as a secret `MONGO_URL=mongodb://<your-database>`.
 
 ### If This Then Webtask
- 
+
+![If This Then [Node]](/IFTTT4.jpg "We use IFTTT's Maker channel to make the request")
+
 Connecting your webtask to IFTTT is relatively painless, just setup a recipe to be triggered every time you save something to Pocket and configure the 'That' component to be a 'Maker Channel', where we can hand over control to our script. Copy and paste the URL given by `wt create` into the box, but add `&title={{Title}}&excerpt={{Excerpt}}` to the very end. This dumps the data given by the Pocket channel, making it consumable in the webtask's context.
 
 You can test to see if everything's working by saving something in Pocket and watching your webtask's logs with `wt logs`. Sometimes it takes a little while for IFTTT to send the request (within a couple of minutes), but you should see a bunch of 'Successfully saved' messages in your console.
