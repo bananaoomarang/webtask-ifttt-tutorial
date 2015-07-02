@@ -1,23 +1,24 @@
-"use latest";
-
-var { MongoClient } = require('mongodb');
+var parallel    = require('async').parallel;
+var MongoClient = require('mongodb').MongoClient;
 
 function save_word(word, db, cb) {
-  const doc       = { word };
+  var doc       = {
+    word: word
+  };
 
-  const increment = {
+  var increment = {
     $inc: {
       count: 1
     }
   };
 
-  const opts      = {
+  var opts      = {
     upsert: true
   };
 
   db
     .collection('words')
-    .updateOne(doc, increment, opts, err => {
+    .updateOne(doc, increment, opts, function (err) {
       if(err) return cb(err);
 
       console.log('Successfully saved %s', word);
@@ -26,25 +27,33 @@ function save_word(word, db, cb) {
     });
 }
 
-return (ctx, done) => {
-  const { MONGO_URL, title, excerpt } = ctx.data;
-  const words = title
+return function (ctx, done) {
+  var words = ctx.data.title
     .split(' ')
     .concat(
-      excerpt.split(' ')
+      ctx.data.excerpt.split(' ')
     );
 
-  MongoClient.connect(MONGO_URL, (err, db) => {
+  MongoClient.connect(ctx.data.MONGO_URL, function (err, db) {
     if(err) return done(err);
 
-    words.forEach(word => {
+    var job_list = words.map(function (word) {
 
-      save_word(word, db, err => {
-        if(err) done(err);
-      });
+      return function (cb) {
+        save_word(word, db, function (err) {
+          if(err) return cb(err);
+
+          cb(null);
+        });
+      };
 
     });
 
-    done(null, 'Success.');
+    parallel(job_list, function (err) {
+      if(err) return done(err);
+
+      done(null, 'Success.');
+    });
+
   });
 };
