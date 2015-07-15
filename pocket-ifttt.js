@@ -27,7 +27,7 @@ function save_word(word, db, cb) {
     });
 }
 
-return function (ctx, done) {
+module.exports = function (ctx, done) {
   var words = ctx.data.title
     .split(' ')
     .concat(
